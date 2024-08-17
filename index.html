@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reserva das Pizzas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: rgb(172, 153, 116);
+            margin: 0;
+            padding: 0;
+        }
+        .header {
+            background-color: rgb(9, 48, 74);
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+        .header img {
+            width: 135px;
+            height: auto;
+        }
+        .container {
+            width: 75%;
+            margin: 20px auto;
+            padding: 27px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgb(9, 48, 74);
+        }
+        #titulo-secundario {
+            color: rgb(9, 48, 74);
+            text-align: center;
+        }
+        h2 {
+            color: #ffffff;
+            text-align: center;
+        }
+        h3 {
+            color: rgb(9, 48, 74);
+            text-align: center;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        select, input[type="number"], textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-left: 0%;
+        }
+        textarea {
+            resize: vertical;
+            margin-left: -1%;
+        }
+        #observacoes {
+            width: 94%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-left: -1%;
+        }
+        #apartamento {
+            width: 94%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-left: -1%;
+        }
+        button {
+            background-color: rgb(9, 48, 74);
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: rgb(9, 48, 74);
+        }
+        #total {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        #total {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background-color: rgb(25, 163, 37);
+            color: #fff;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            font-size: 18px;
+            font-weight: bold;
+            z-index: 1000; /* para garantir que o total fique sobreposto a outros elementos */
+        }
+        .hidden {
+            display: none;
+        }
+        .error {
+            color: red;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="https://marketplace.canva.com/EAF-NbSQJKI/1/0/1600w/canva-logotipo-pizzaria-borcelle-geom%C3%A9trico-verde-vermelho-branco-preto-rkw-JKt3Ccc.jpg" alt="Imagem">
+        <h2>Pizzaria Borcelle</h2>
+    </div>
+    <div class="container">
+        <h3>Horário de Funcionamento: De Segunda a Domingo, das 17h às 23h</h3>
+        <h2 id="titulo-secundario">Faça seu Pedido</h2>
+        <form id="pedidoForm">
+            <label for="bloco">Bloco:</label>
+            <select id="bloco" name="bloco" required>
+                <option value="" disabled selected>Selecione o bloco</option>
+                <option value="Bromélia">Bromélia</option>
+                <option value="Eugênia">Eugênia</option>
+                <option value="Hibisco">Hibisco</option>
+                <option value="Vitória Régia">Vitória Régia</option>
+            </select>
+            <label for="apartamento">Apartamento:</label>
+            <input type="number" id="apartamento" name="apartamento" required>
+            <label for="tamanho">Tamanho da pizza:</label>
+            <select id="tamanho" name="tamanho" required>
+                <option value="" disabled selected>Selecionar</option>
+                <option value="Pequena" data-preco="30">Pequena - R$ 30</option>
+                <option value="Média" data-preco="50">Média - R$ 50</option>
+                <option value="Grande" data-preco="70">Grande - R$ 70</option>
+            </select>
+            <div id="saborContainer" class="hidden">
+                <label for="sabor">Sabores da pizza:</label>
+                <select id="sabor" name="sabor[]" multiple required>
+                    <option value="Mussarela">Mussarela</option>
+                    <option value="Calabresa">Calabresa</option>
+                    <option value="Frango">Frango</option>
+                    <option value="Vegetariana">Vegetariana</option>
+                    <option value="Portuguesa">Portuguesa</option>
+                    <option value="Napolitana">Napolitana</option>
+                </select>
+                <div id="saborError" class="error"></div>
+            </div>
+            <label for="bordas">Recheio da borda:</label>
+            <select id="bordas" name="bordas">
+                <option value="" disabled selected>Selecionar</option>
+                <option value="Não" data-preco="0">Não quero borda recheada</option>
+                <option value="Catupiry" data-preco="20">Catupiry - R$ 15</option>
+                <option value="Cheddar" data-preco="18">Cheddar - R$ 12</option>
+            </select>
+            <label for="bebida">Bebidas:</label>
+            <select id="bebida" name="bebida">
+                <option value="" disabled selected>Selecionar</option>
+                <option value="Não" data-preco="0">Não quero bebida</option>
+                <option value="Coca-Cola 350ml" data-preco="5">Coca-Cola 350ml - R$ 5</option>
+                <option value="Coca-Cola 600ml" data-preco="7">Coca-Cola 600ml - R$ 7</option>
+                <option value="Coca-Cola 1L" data-preco="10">Coca-Cola 1L - R$ 10</option>
+                <option value="Guaraná 350ml" data-preco="5">Guaraná 350ml - R$ 5</option>
+                <option value="Guaraná 600ml" data-preco="7">Guaraná 600ml - R$ 7</option>
+                <option value="Guaraná 1L" data-preco="10">Guaraná 1L - R$ 10</option>
+                <option value="Fanta 350ml" data-preco="5">Fanta 350ml - R$ 5</option>
+                <option value="Fanta 600ml" data-preco="7">Fanta 600ml - R$ 7</option>
+                <option value="Fanta 1L" data-preco="10">Fanta 1L - R$ 10</option>
+            </select>
+            <label for="formaPagamento">Forma de Pagamento:</label>
+            <select id="formaPagamento" name="formaPagamento">
+                <option value="" disabled selected>Selecionar</option>
+                <option value="Pix" data-preco="0">Pix</option>
+                <option value="Dinheiro" data-preco="0">Dinheiro</option>
+                <option value="Cartão de Crédito" data-preco="0">Cartão de Crédito</option>
+                <option value="Cartão de Débito" data-preco="0">Cartão de Débito</option>
+            </select>
+            <label for="observacoes">Observações:</label>
+            <textarea id="observacoes" name="observacoes" rows="4" placeholder="Observações adicionais"></textarea>
+            <div id="total">Total: R$ 0</div>
+            <button type="submit">
+                Enviar Pedido
+            </button>
+        </form>
+    </div>
+    <script>
+        const tamanhoSelect = document.getElementById('tamanho');
+        const saborContainer = document.getElementById('saborContainer');
+        const saborSelect = document.getElementById('sabor');
+        const saborError = document.getElementById('saborError');
+        const bordasSelect = document.getElementById('bordas');
+        const bebidaSelect = document.getElementById('bebida');
+        const totalDiv = document.getElementById('total');
+
+        // Atualiza os sabores disponíveis com base no tamanho da pizza selecionado
+        function atualizarSabores() {
+            const tamanhoSelecionado = tamanhoSelect.value;
+            saborContainer.classList.toggle('hidden', tamanhoSelecionado === '');
+            saborError.innerHTML = '';
+        }
+
+        // Calcula o total do pedido
+        function calcularTotal() {
+            const tamanhoPreco = parseFloat(tamanhoSelect.options[tamanhoSelect.selectedIndex]?.dataset.preco || 0);
+            const bordaPreco = parseFloat(bordasSelect.options[bordasSelect.selectedIndex]?.dataset.preco || 0);
+            const bebidaPreco = parseFloat(bebidaSelect.options[bebidaSelect.selectedIndex]?.dataset.preco || 0);
+            const total = tamanhoPreco + bordaPreco + bebidaPreco;
+            totalDiv.innerText = `Total: R$ ${total.toFixed(2)}`;
+        }
+
+        // Envia o pedido via WhatsApp
+        function enviarPedido() {
+            const bloco = document.getElementById('bloco').value;
+            const apartamento = document.getElementById('apartamento').value;
+            const tamanho = document.getElementById('tamanho').value;
+            const saboresSelecionados = Array.from(document.getElementById('sabor').selectedOptions).map(option => option.value);
+            const bordas = document.getElementById('bordas').value;
+            const bebida = document.getElementById('bebida').value;
+            const formaPagamento = document.getElementById('formaPagamento').value;
+            const observacoes = document.getElementById('observacoes').value;
+            const total = parseFloat(totalDiv.innerText.replace('Total: R$ ', ''));
+
+            // Modificação aqui: cada sabor em uma nova linha
+            const saboresFormatados = saboresSelecionados.join('\n');
+            const mensagem = `*Pedido de Pizza*\n\nOlá, eu moro no bloco ${bloco}, apartamento ${apartamento}, e gostaria de fazer o seguinte pedido de pizza:\n\n*Tamanho da Pizza:* ${tamanho}\n*Sabores:*\n${saboresFormatados}\n*Borda Recheada:* ${bordas}\n*Bebida:* ${bebida}\n*Forma de Pagamento:* ${formaPagamento}\n*Observações:* ${observacoes}\n\n*Total:* R$ ${total}`;
+            const whatsappUrl = `https://api.whatsapp.com/send?phone=+5521982248042&text=${encodeURIComponent(mensagem)}`;
+            window.open(whatsappUrl, '_blank');
+        }
+
+        // Adiciona eventos de escuta
+        tamanhoSelect.addEventListener('change', () => {
+            atualizarSabores();
+            calcularTotal();
+        });
+        saborSelect.addEventListener('change', calcularTotal);
+        bordasSelect.addEventListener('change', calcularTotal);
+        bebidaSelect.addEventListener('change', calcularTotal);
+
+        // Adiciona evento de escuta para o envio do formulário
+        document.getElementById('pedidoForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Impede o envio padrão do formulário
+            calcularTotal(); // Calcula o total
+            enviarPedido(); // Envia o pedido
+        });
+    </script>
+</body>
+</html>
